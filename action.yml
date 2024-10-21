@@ -1,0 +1,18 @@
+name: "Upload Run Inputs Executable"
+description: "Uploads a file to the run inputs executables bucket"
+branding:
+  icon: "git-merge"
+  color: "purple"
+inputs:
+  qawolf-api-key:
+    description: "QA Wolf API key. You can find it in the application team settings page."
+    required: true
+  input-file-path:
+    description: "Path to the file to be uploaded."
+    required: true
+outputs:
+  destination-file-path:
+    description: "The file location in the QA Wolf runs file system."
+runs:
+  using: "node20"
+  main: "dist/index.js"
