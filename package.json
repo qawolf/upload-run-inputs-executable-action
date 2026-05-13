@@ -1,29 +1,41 @@
 {
   "name": "@qawolf/upload-run-inputs-executable-action",
-  "version": "v1.0.0",
-  "type": "commonjs",
+  "version": "v2.0.0",
+  "private": false,
+  "sideEffects": false,
+  "type": "module",
   "main": "dist/index.js",
-  "engines": {
-    "node": "^18 || >=20"
-  },
   "scripts": {
-    "build": "ncc build src/index.ts -o dist",
-    "build:clean": "tsc --build --clean && rm -rf ./dist",
-    "lint": "eslint . --ext js,jsx,mjs,ts,tsx --quiet && prettier --check .",
-    "lint:fix": "eslint . --ext js,jsx,mjs,ts,tsx --fix --quiet && prettier --log-level=warn --write .",
-    "lint:warnings": "eslint . --ext js,jsx,mjs,ts,tsx",
-    "test": "jest --passWithNoTests",
-    "test:watch": "npm run test -- --watch",
-    "tsc:check": "tsc",
-    "gen": "npm run build"
+    "build": "rm -rf ./dist && node esbuild.mjs",
+    "gen": "npm run build",
+    "lint:ci": "npm run lint:non-fixable; NON_FIXABLE_EXIT=$?; npm run lint:fixable && exit $NON_FIXABLE_EXIT",
+    "lint:dev": "npm run lint:fixable",
+    "lint:fixable": "eslint . --ext cjs,cts,js,jsx,mjs,ts,tsx --fix --quiet && prettier --log-level=warn --write .",
+    "lint:non-fixable": "dpdm --exit-code circular:1 --no-tree --no-warning --transform --include='.*' --exclude='/(dist|node_modules)/' '**/*'",
+    "tsc:check": "tsc"
   },
   "dependencies": {
-    "@actions/core": "^1.10.1",
+    "@actions/core": "^2.0.3",
     "@qawolf/ci-sdk": "*",
     "@qawolf/ci-utils": "*",
     "tslib": "^2.5.3"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.38.1"
+    "esbuild": "^0.25.9"
+  },
+  "engines": {
+    "node": ">=22.22.0 <25"
+  },
+  "nx": {
+    "targets": {
+      "gen": {
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "{projectRoot}/dist"
+        ]
+      }
+    }
   }
 }

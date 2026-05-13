@@ -5,7 +5,7 @@ branding:
   color: "purple"
 inputs:
   qawolf-api-key:
-    description: "QA Wolf API key. You can find it in the application team settings page."
+    description: "QA Wolf API key. You can find it in the application workspace settings page."
     required: true
   input-file-path:
     description: "Path to the file to be uploaded."
@@ -14,5 +14,5 @@ outputs:
   destination-file-path:
     description: "The file location in the QA Wolf runs file system."
 runs:
-  using: "node20"
+  using: "node24"
   main: "dist/index.js"

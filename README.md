@@ -7,7 +7,7 @@ package](https://www.npmjs.com/package/@qawolf/ci-sdk).
 
 ### `qawolf-api-key`
 
-**Required**. The QA Wolf API key, which you can find on the application's team settings page.
+**Required**. The QA Wolf API key, which you can find on the application's workspace settings page.
 
 ### `input-file-path`
 

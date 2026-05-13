@@ -5,7 +5,9 @@ import path from "path";
 import { makeQaWolfSdk } from "@qawolf/ci-sdk";
 import { coreLogDriver, stringifyUnknown } from "@qawolf/ci-utils";
 
-import { validateInput } from "./validateInput";
+import packageJson from "../package.json" with { type: "json" };
+
+import { validateInput } from "./validateInput.js";
 
 async function runGitHubAction() {
   core.debug("Validating input.");
@@ -16,7 +18,10 @@ async function runGitHubAction() {
   }
   const { apiKey, generateSignedUrlConfig } = validationResult;
   const { generateSignedUrlForRunInputsExecutablesStorage } = makeQaWolfSdk(
-    { apiKey },
+    {
+      apiKey,
+      userAgent: `upload-run-inputs-executable-action/${packageJson.version}`,
+    },
     {
       log: coreLogDriver,
     },
@@ -49,13 +54,14 @@ async function runGitHubAction() {
   const url = generateSignedUrlResult.uploadUrl;
 
   if (!url) {
-    core.setFailed(`Failed to recieve upload URL`);
+    core.setFailed(`Failed to receive upload URL`);
     return;
   }
 
   try {
     const response = await fetch(url, {
-      body: fileBuffer,
+      // Type cast because of old technical debt
+      body: fileBuffer as Buffer<ArrayBuffer>,
       headers: {
         "Content-Type": "application/octet-stream",
       },

@@ -1,6 +1,6 @@
 import * as core from "@actions/core";
 
-import { type GenerateSignedUrlConfig } from "@qawolf/ci-sdk";
+import type { GenerateSignedUrlConfig } from "@qawolf/ci-sdk";
 export function validateInput():
   | {
       apiKey: string;
